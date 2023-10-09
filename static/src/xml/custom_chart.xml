@@ -1,0 +1,9 @@
+<!-- /opt/odoo16/odoo16/custom/chart_app/static/src/xml/custom_chart.xml -->
+<templates>
+    <t t-name="ChartDivTemplate">
+        <div>
+            <button type="button" class="btn btn-primary o_render_chart_button">Render Chart</button>
+            <div id="chart_div">tarek eissa</div>
+        </div>
+    </t>
+</templates>

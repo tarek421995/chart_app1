@@ -1,0 +1,145 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <template id="assets_backend" name="chart_app assets" inherit_id="web.assets_backend">
+        <xpath expr="." position="inside">
+            <script type="text/javascript" src="/chart_app/static/src/js/execute_js.js"></script>
+        </xpath>
+    </template>
+</odoo>
+
+
+
+<!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.3.0/papaparse.min.js"></script>
+<script src="https://cdn.plot.ly/plotly-latest.min.js" data-oe-model="ir.ui.view" data-oe-id="1912" data-oe-field="arch" data-oe-xpath="/t[1]/t[1]/script[1]"></script>
+
+<script type="text/javascript">
+function createChartDivs() {
+const container = document.getElementById('chart_div');
+
+const priceDiv = document.createElement('div');
+priceDiv.id = 'priceDiv';
+container.appendChild(priceDiv);
+
+const publishDiv = document.createElement('div');
+publishDiv.id = 'publishDiv';
+container.appendChild(publishDiv);
+
+const categoryDiv = document.createElement('div');
+categoryDiv.id = 'categoryDiv';
+container.appendChild(categoryDiv);
+}
+
+function parseCSVData(csvData) {
+Papa.parse(csvData, {
+    header: true,
+    dynamicTyping: true,
+    complete: function (result) {
+        plotData(result.data);
+    }
+});
+}
+
+function plotData(data) {
+// 1. Bar Chart: Product Prices
+let trace1 = {
+    x: data.map((row) => row["product.template_name"]),
+    y: data.map((row) => row["product.template_list_price"]),
+    name: "List Price",
+    type: "bar",
+    marker: { color: 'rgb(55, 83, 109)' }
+};
+
+let trace2 = {
+    x: data.map((row) => row["product.template_name"]),
+    y: data.map((row) => row["product.template_standard_price"]),
+    name: "Standard Price",
+    type: "bar",
+    marker: { color: 'rgb(26, 118, 255)' }
+};
+
+let layout1 = {
+    title: 'Product Prices',
+    xaxis: { title: 'Products' },
+    yaxis: { title: 'Price' },
+    barmode: 'group'
+};
+
+Plotly.newPlot("priceDiv", [trace1, trace2], layout1);
+
+// 2. Pie Chart: Published Products
+let publishedCount = data.filter(
+    (row) => row["product.template_is_published"]
+).length;
+let notPublishedCount = data.length - publishedCount;
+
+let pieData = [{
+    values: [publishedCount, notPublishedCount],
+    labels: ["Published", "Not Published"],
+    type: "pie",
+    hole: .4,  // This makes the chart a donut chart
+    marker: {
+        colors: ['rgb(26, 118, 255)', 'rgb(55, 83, 109)']
+    }
+}];
+
+let layout2 = {
+    title: 'Published vs Not Published Products',
+};
+
+Plotly.newPlot("publishDiv", pieData, layout2);
+
+// 3. Bar Chart: Total Sale Amount by Product Category
+let categories = [
+    ...new Set(data.map((row) => row["product.template_categ_id"]))
+];
+let totals = categories.map((category) => {
+    return data
+        .filter((row) => row["product.template_categ_id"] === category)
+        .reduce((sum, row) => sum + row["sale.order_amount_total"], 0);
+});
+
+let categoryData = {
+    x: categories,
+    y: totals,
+    type: "bar",
+    marker: { color: 'rgb(26, 118, 255)' }
+};
+
+let layout3 = {
+    title: 'Total Sale Amount by Product Category',
+    xaxis: { title: 'Category' },
+    yaxis: { title: 'Total Sale Amount' }
+};
+
+Plotly.newPlot("categoryDiv", [categoryData], layout3);
+}
+
+function initChart() {
+fetch('http://localhost:8016/charts/2/csv')
+    .then(response => response.json())
+    .then(jsonResponse => {
+        console.log('jsonResponse', jsonResponse);
+
+        if (jsonResponse.csv_data) {
+            // Create chart divs
+            createChartDivs();
+
+            // Parse CSV data and subsequently plot charts
+            parseCSVData(jsonResponse.csv_data);
+        } else {
+            console.error('No CSV data found in the server response.');
+        }
+    })
+    .catch(error => {
+        console.error('Error fetching CSV:', error);
+    });
+}
+
+window.onload = function() {
+if (typeof Plotly !== 'undefined') {
+    initChart();
+} else {
+    console.error("Plotly library not loaded!");
+}
+}
+</script> -->

@@ -1,0 +1,4 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+chart_app.access_chart_data_source,access_chart_data_source,chart_app.model_chart_data_source,base.group_user,1,1,1,1
+chart_app.access_chart_builder,access_chart_builder,chart_app.model_chart_builder,base.group_user,1,1,1,1
+chart_app.access_chart_data_source_field,access_chart_data_source_field,chart_app.model_chart_data_source_field,base.group_user,1,1,1,1

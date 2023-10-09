@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <data>
+        <record id="view_chart_builder_form" model="ir.ui.view">
+            <field name="name">chart.builder.form</field>
+            <field name="model">chart.builder</field>
+            <field name="arch" type="xml">
+                <form>
+                    <!-- Your fields here -->
+                    <field name="name"/>
+                    <field name="chart_data"/>
+                    <field name="js_code"/>
+                    <!-- More fields -->
+
+                    <!-- Container for your charts -->
+                    <div id="chart_div"></div>
+
+                    <!-- JS Libraries -->
+                    <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.3.0/papaparse.min.js"></script>
+                    <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+
+                    <!-- Your JS code here -->
+                    <script type="text/javascript">
+                        // Your JavaScript code
+                    </script>
+                </form>
+            </field>
+        </record>
+    </data>
+</odoo>

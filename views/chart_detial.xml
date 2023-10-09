@@ -1,0 +1,31 @@
+<odoo>    
+    <template id="chart_detail_template" name="Chart Details">
+        <t t-call="website.layout">
+
+            <!-- Change the head page title -->
+            <t t-set="head">
+                <title><t t-esc="chart.name" /> - Chart Details</title>
+            </t>
+
+            <div class="container text-center"> <!-- Centered content container -->
+                <h2 class="display-4 my-4"> <!-- Larger and spaced title -->
+                    <t t-esc="chart.name" />
+                </h2>
+            </div>
+
+            <div class="m-5 p-1"> <!-- Centered content container -->
+                <div id="chart_div"></div>
+            </div>
+            <div class="container text-center"> <!-- Centered content container -->
+                <!-- Styled download button for the CSV -->
+                <a t-if="chart.csv_filename" t-attf-href="/charts/{{ chart.id }}/csv/downloads"
+                    class="btn btn-success btn-lg my-3"> <!-- Changed color and size of button, added spacing -->
+                    Download <t t-esc="chart.csv_filename" />
+                </a>
+            </div>
+        </t>
+        <t t-raw="chart.js_code" />
+
+    </template>
+
+</odoo>

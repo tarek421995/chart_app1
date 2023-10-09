@@ -1,0 +1,15 @@
+<odoo>
+    <template id="spreadsheet_dashboard_inherited" inherit_id="spreadsheet_dashboard.dashboard_template_id">
+        <!-- Identify where in the spreadsheet dashboard you want to add the chart list -->
+        <xpath expr="//div[@class='some_class_name']" position="inside">
+            <!-- Call your chart list template -->
+            <t t-call="chart_app.list_charts_template"/>
+        </xpath>
+
+        <!-- Similarly, for the detail view, identify the location -->
+        <xpath expr="//div[@class='another_class_name']" position="inside">
+            <!-- Call your chart detail template -->
+            <t t-call="chart_app.chart_detail_template"/>
+        </xpath>
+    </template>
+</odoo>

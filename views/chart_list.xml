@@ -1,0 +1,60 @@
+<odoo>
+    <template id="list_charts_template" name="List Charts">
+        <t t-call="website.layout">
+            <div class="container mt-4">
+                <h2>Charts Overview</h2>
+
+                <!-- Iterating through each chart -->
+                <t t-foreach="charts" t-as="chart">
+                    <h3 class="mt-5">
+                        <a t-attf-href="/charts/{{ chart.id }}">
+                            <t t-esc="chart.name" />
+                        </a>
+                    </h3>
+
+                    <!-- Table for the data sources and fields of the chart -->
+                    <table class="table table-striped table-bordered mt-3">
+                        <thead>
+                            <tr>
+                                <th>Data Source</th>
+                                <th>Field Description</th>
+                                <th>Field Name</th>
+                                <th>Field Type</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <!-- Iterating through data sources of the chart -->
+                            <t t-foreach="chart.data_source_ids" t-as="source">
+                                <!-- Iterating through fields of the data source -->
+                                <t t-foreach="source.field_ids" t-as="field">
+                                    <tr>
+                                        <!-- Link to the model in admin -->
+                                        <td>
+                                            <a
+                                                t-attf-href="/web#id={{source.model_id.id}}&amp;cids=1&amp;menu_id=33&amp;action=18&amp;model=ir.model&amp;view_type=form">
+                                                <t t-esc="source.model_id.model" />
+                                            </a>
+                                        </td>
+                                        <td>
+                                            <t t-esc="field.name" />
+                                        </td>
+                                        <!-- Link to the field in admin -->
+                                        <td>
+                                            <a t-attf-href="/web#id={{field.field_id.id}}&amp;cids=1&amp;menu_id=34&amp;action=19&amp;model=ir.model.fields&amp;view_type=form">
+                                                <t t-esc="field.field_id.field_description" />
+                                            </a>
+                                            
+                                        </td>
+                                        <td>
+                                            <t t-esc="field.field_id.ttype" />
+                                        </td>
+                                    </tr>
+                                </t>
+                            </t>
+                        </tbody>
+                    </table>
+                </t>
+            </div>
+        </t>
+    </template>
+</odoo>

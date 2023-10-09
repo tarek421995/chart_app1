@@ -1,0 +1,104 @@
+<odoo>
+    <!-- Chart Builder Form View -->
+    <record id="view_chart_builder_form" model="ir.ui.view">
+        <field name="name">chart.builder.form</field>
+        <field name="model">chart.builder</field>
+        <field name="arch" type="xml">
+            <form>
+                <header>
+                    <button name="export_data_source_csv" string="Export CSV" type="object"
+                        class="btn-primary" />
+                    <button name="button_execute_js" string="Execute JS" type="object" class="btn-primary" />
+                </header>
+                <sheet>
+                    <group>
+                        <field name="name" />
+                        <field name="data_source_ids" widget="many2many_tags"
+                            options="{'create': True}" context="{'default_chart_id': active_id}" />
+                        <field name="chart_data" />
+                        <field name="csv_data_file" widget="binary" filename="csv_filename" />
+                        <field name="csv_filename" />
+                        <field name="js_code" widget="text" placeholder="Insert your JS code here..."/>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <!-- Action for Chart Data Source -->
+    <record id="action_chart_data_source" model="ir.actions.act_window">
+        <field name="name">Data Sources</field>
+        <field name="res_model">chart.data.source</field>
+        <field name="view_mode">tree,form</field>
+    </record>
+
+    <!-- Chart Builder Tree View -->
+    <record id="view_chart_builder_tree" model="ir.ui.view">
+        <field name="name">chart.builder.tree</field>
+        <field name="model">chart.builder</field>
+        <field name="arch" type="xml">
+            <tree>
+                <field name="data_source_ids" widget="many2many_tags" options="{'no_create': True}"
+                    context="{'default_chart_id': active_id}" />
+                <field name="name" string="Chart Name"/>
+                <field name="sequence"/>
+            </tree>
+        </field>
+    </record>
+
+    <!-- Action to Open Chart Builder Views -->
+    <record id="action_chart_builder" model="ir.actions.act_window">
+        <field name="name">Chart Builder</field>
+        <field name="res_model">chart.builder</field>
+        <field name="view_mode">tree,form</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Create a new chart
+            </p>
+        </field>
+    </record>
+
+    <!-- Main Menu Item -->
+    <menuitem id="menu_chart_builder_main" name="Chart App" />
+
+    <menuitem id="menu_chart_builder" parent="menu_chart_builder_main" action="action_chart_builder" />
+
+    <!-- Menu Items -->
+    <menuitem id="menu_chart_data_source_main" name="Data Source" parent="menu_chart_builder_main"
+        sequence="10" action="action_chart_data_source" />
+
+    <!-- Data Source Form View -->
+    <record id="view_chart_data_source_form" model="ir.ui.view">
+        <field name="name">chart.data.source.form</field>
+        <field name="model">chart.data.source</field>
+        <field name="arch" type="xml">
+            <form>
+                <group>
+                    <field name="name" />
+                    <field name="model_id" />
+                    <field name="field_ids" widget="one2many_list">
+                        <tree editable="bottom">
+                            <field name="name" />
+                            <field name="field_id" />
+                        </tree>
+                    </field>
+                </group>
+            </form>
+        </field>
+    </record>
+
+    <!-- Add the server action record here -->
+    <record id="export_chart_data_source_csv_action" model="ir.actions.server">
+        <field name="name">Export Data Sources to CSV</field>
+        <field name="model_id" ref="model_chart_data_source" />
+        <field name="binding_model_id" ref="model_chart_data_source" />
+        <field name="state">code</field>
+        <field name="code">
+            records.export_data_source_csv()
+        </field>
+    </record>
+
+    <!-- Additional Menu Items -->
+    <menuitem id="menu_chart_list_main" name="Charts List" parent="menu_chart_builder_main"
+        sequence="5" action="action_chart_builder" />
+</odoo>
