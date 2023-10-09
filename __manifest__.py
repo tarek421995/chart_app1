@@ -20,24 +20,19 @@
     'author': "Tarek Eissa",
     'maintainer': "Tarek Eissa",
     'contributors': [""],
-    'website': "https://www.yourcompany.com",
+    'website': "https://www.prospexai.com",
     
     'category': 'Analytics',
     'version': '1.0',
 
     'license': "Other proprietary",
-    'depends': ['base', 'website','spreadsheet_dashboard', 'base_setup', 'portal', 'web', 'web_editor'],
+    'depends': ['base', 'website', 'spreadsheet_dashboard', 'base_setup', 'portal', 'web', 'web_editor'],
 
     'data': [
         'security/ir.model.access.csv',
         'views/views.xml',
         'views/chart_list.xml',
         'views/chart_detial.xml',
-        # 'views/chart_builder_view.xml',
-        # 'views/assets_backend.xml',
-        # 'chart_app/static/src/xml/custom_chart.xml',
-        # 'views/spreadsheet_dashboard.group.view.form.xml'
-        # 'views/spreadsheet_dashboard.xml',
     ],
     'qweb': [
         'static/src/xml/custom_chart.xml',
@@ -49,7 +44,6 @@
         ],
     },
 
-
     'demo': [
         'demo/demo.xml',
     ],
@@ -58,6 +52,9 @@
         'static/description/main_screenshot.png',
         'static/src/img/pngwing.com.png'
     ],
+
+    'price': 49.99,       # Added this line for pricing
+    'currency': 'USD',    # Added this line for currency
 
     'application': True,
     'installable': True,
