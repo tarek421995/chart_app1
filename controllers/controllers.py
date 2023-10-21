@@ -2,6 +2,9 @@ import base64
 from odoo import http
 from odoo.http import request
 import json
+from odoo.exceptions import AccessDenied
+from odoo.service import db as odoo_db  # Import the db module from Odoo's service
+
 
 class ChartController(http.Controller):
 
@@ -40,6 +43,7 @@ class ChartController(http.Controller):
         headers = {'Content-Type': 'application/json', 'Access-Control-Allow-Origin': '*'}
         return request.make_response(response_data, headers=headers)
 
+
     @http.route('/charts/<int:chart_id>/csv/downloads', type='http', auth="none")
     def download_csv(self, chart_id):
         chart = request.env['chart.builder'].sudo().browse(chart_id)
@@ -54,3 +58,37 @@ class ChartController(http.Controller):
             'Content-Disposition': f'attachment; filename="{chart.csv_filename}"'
         }
         return request.make_response(response_data, headers=headers)
+
+
+
+class CustomController(http.Controller):
+
+    @http.route('/login', type='json', auth='none', methods=['POST'], csrf=False)
+    def login(self, **post):
+
+        if request.httprequest.headers.get('Content-Type') == 'application/json':
+            try:
+                data = json.loads(request.httprequest.data.decode('utf-8'))
+                db_name = data.get('db')  # Renamed variable to db_name to avoid conflict
+                if not db_name:
+                    return {'status': 'error', 'message': 'Database name is missing or invalid'}
+                
+                print('odoo_db.list_dbs()',odoo_db.list_dbs())
+                # Check if database exists
+                if db_name not in odoo_db.list_dbs():  # Use odoo_db.list_dbs() here
+                    return {'status': 'error', 'message': 'Database not found'}
+                
+                login = data.get('login')
+                password = data.get('password')
+                try:
+                    uid = request.session.authenticate(db_name, login, password)
+                    if uid:
+                        return {'status': 'success', 'message': 'Logged in successfully', 'session_id': request.session.sid}
+                    else:
+                        return {'status': 'error', 'message': 'Authentication failed'}
+                except AccessDenied:
+                    return {'status': 'error', 'message': 'Access Denied: Incorrect username or password'}
+            except json.JSONDecodeError:
+                return {'status': 'error', 'message': 'Invalid JSON payload'}
+        else:
+            return {'status': 'error', 'message': 'Authentication failed'}

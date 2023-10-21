@@ -64,22 +64,8 @@ class ChartBuilder(models.Model):
             'params': {
                 'js_code': js_code,
         },
-}
+    }
 
-    def extract_chart_data(self):
-        """Extract the chart data from the models."""
-        data_list = []
-        for source in self.data_source_ids:
-            model = source.model_id.model
-            Model = self.env[model]
-            for field in source.field_ids:
-                field_name = field.field_id.name
-                data_list.append({
-                    'name': f"{source.name}_{field_name}",
-                    'values': Model.search([]).mapped(field_name)
-                })
-        return data_list
-    
     def export_data_source_csv(self):
         self.ensure_one()
 
@@ -96,7 +82,10 @@ class ChartBuilder(models.Model):
             for ds_field in data_source.field_ids:
                 field_name = ds_field.field_id.name
                 combined_name = f"{model_name}_{field_name}"
-                header.append(combined_name)
+                if ds_field.field_id.ttype in ['many2one', 'many2many', 'one2many']:
+                    header.extend([combined_name + '_id', combined_name + '_name'])
+                else:
+                    header.append(combined_name)
                 fields_mapping[combined_name] = ds_field.field_id
                 if ds_field.name.lower() == 'index':
                     index_fields[model_name] = field_name
@@ -114,27 +103,32 @@ class ChartBuilder(models.Model):
                 field_name = field.name
                 field_type = field.ttype
 
-                # If the current model has an 'index' field, use it to search for a matching record
                 if model_name in index_fields:
                     index_value = getattr(primary_record, index_fields[primary_model])
                     records = self.env[model_name].search([(index_fields[model_name], '=', index_value.id if isinstance(index_value, models.BaseModel) else index_value)], limit=1)
                     record = records[0] if records else None
                 else:
-                    # Fallback to get records sequentially if no index field is found
                     records = self.env[model_name].search([])
                     record = records[row_counter] if len(records) > row_counter else None
 
                 if record:
                     if field_type == 'many2one':
-                        field_content = record[field_name].name if record[field_name] else ''
+                        related_record = record[field_name]
+                        if related_record:
+                            row.extend([related_record.id, related_record.name])
+                        else:
+                            row.extend(['', ''])
                     elif field_type in ['many2many', 'one2many']:
-                        field_content = ', '.join([related.name for related in record[field_name][:5]])
+                        ids = [related.id for related in record[field_name][:5]]
+                        names = [related.name for related in record[field_name][:5]]
+                        row.extend(['| '.join(map(str, ids)), '| '.join(names)])
                     else:
-                        field_content = record[field_name]
+                        row.append(record[field_name])
                 else:
-                    field_content = ''
-
-                row.append(field_content)
+                    if field_type in ['many2one', 'many2many', 'one2many']:
+                        row.extend(['', ''])
+                    else:
+                        row.append('')
 
             writer.writerow(row)
             row_counter += 1

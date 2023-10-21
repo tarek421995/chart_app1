@@ -38,7 +38,7 @@
         'static/src/xml/custom_chart.xml',
     ],
 
-    'assets': {
+    'assets': { 
         'web.assets_backend': [
             'chart_app/static/src/js/execute_js.js',
         ],
